@@ -2,4 +2,12 @@
 
 find_package(GTest REQUIRED)
 
-# No tests yet. Add at_most tests here.
+add_executable(beman.at_most.tests)
+target_sources(beman.at_most.tests PRIVATE at_most.test.cpp)
+target_link_libraries(
+    beman.at_most.tests
+    PRIVATE beman::at_most GTest::gtest GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(beman.at_most.tests)
