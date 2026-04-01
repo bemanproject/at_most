@@ -18,10 +18,10 @@ endif()
 message("Examples to be built: ${ALL_EXAMPLES}")
 
 foreach(example ${ALL_EXAMPLES})
-    add_executable(beman.exemplar.examples.${example})
-    target_sources(beman.exemplar.examples.${example} PRIVATE ${example}.cpp)
+    add_executable(beman.at_most.examples.${example})
+    target_sources(beman.at_most.examples.${example} PRIVATE ${example}.cpp)
     target_link_libraries(
-        beman.exemplar.examples.${example}
-        PRIVATE beman::exemplar
+        beman.at_most.examples.${example}
+        PRIVATE beman::at_most
     )
 endforeach()
