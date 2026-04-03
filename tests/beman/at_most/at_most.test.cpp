@@ -4,5 +4,3 @@
 #include <gtest/gtest.h>
 
 TEST(AtMostTest, VersionTest) { EXPECT_EQ(beman::at_most::version(), 1); }
-
-TEST(AtMostTest, BlankTest) { EXPECT_TRUE(true); }
