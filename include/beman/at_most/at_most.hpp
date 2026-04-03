@@ -3,6 +3,8 @@
 #ifndef BEMAN_AT_MOST_AT_MOST_HPP
 #define BEMAN_AT_MOST_AT_MOST_HPP
 
+#include <beman/at_most/partial_sort_at_most.hpp>
+
 namespace beman::at_most {
 /**
  * Returns the version of the beman.at_most library.

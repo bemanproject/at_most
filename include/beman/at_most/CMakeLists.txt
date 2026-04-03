@@ -5,5 +5,7 @@ target_sources(
     PUBLIC
         FILE_SET HEADERS
             BASE_DIRS "${CMAKE_SOURCE_DIR}/include"
-            FILES at_most.hpp
+            FILES 
+                at_most.hpp
+                partial_sort_at_most.hpp
 )
