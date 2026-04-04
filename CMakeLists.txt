@@ -30,6 +30,12 @@ include(infra/cmake/beman-install-library.cmake)
 add_library(beman.at_most INTERFACE)
 add_library(beman::at_most ALIAS beman.at_most)
 
+target_compile_features(beman.at_most INTERFACE cxx_std_20)
+set_target_properties(
+    beman.at_most
+    PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
+)
+
 target_sources(
     beman.at_most
     PUBLIC FILE_SET HEADERS BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include"
