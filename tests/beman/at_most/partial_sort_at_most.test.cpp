@@ -98,3 +98,71 @@ TEST(PartialSortAtMostTest, ConstexprStaticAssert) {
     static_assert(result, "partial_sort_at_most failed at compile-time");
     EXPECT_TRUE(result);
 }
+
+// Ranges
+
+struct Holder {
+    int  id;
+    int  val;
+    auto operator<=>(const Holder&) const = default;
+};
+
+template <typename Container, typename Compare = std::ranges::less, typename Proj = std::identity>
+void expect_ranges_equivalent_to_std(Container v, int n, Compare comp = {}, Proj proj = {}) {
+    auto v_std     = v;
+    auto v_at_most = v;
+
+    std::ranges::partial_sort(
+        v_std,
+        std::ranges::next(v_std.begin(), std::max(std::ptrdiff_t(0), std::ptrdiff_t(n)), v_std.end()),
+        comp,
+        proj);
+    ranges::partial_sort_at_most(v_at_most, n, comp, proj);
+
+    EXPECT_EQ(v_at_most, v_std);
+}
+
+TEST(PartialSortAtMostTest, RangesBasic) {
+    std::vector<int> v = {5, 4, 3, 2, 1};
+    expect_ranges_equivalent_to_std(v, 3);
+}
+
+TEST(PartialSortAtMostTest, RangesProjection) {
+    std::vector<Holder> v = {{1, 10}, {2, 5}, {3, 8}};
+    expect_ranges_equivalent_to_std(v, 2, std::ranges::less{}, &Holder::val);
+}
+
+struct ValueSentinel {
+    int  value;
+    bool operator==(auto it) const { return *it == value; }
+};
+
+TEST(PartialSortAtMostTest, RangesSentinel) {
+    std::vector<int> v         = {5, 4, 3, 2, 1, 99};
+    auto             v_std     = v;
+    auto             v_at_most = v;
+    auto             last      = ValueSentinel{99};
+
+    auto mid_std = std::ranges::next(v_std.begin(), 2, last);
+    std::ranges::partial_sort(v_std.begin(), mid_std, last);
+
+    ranges::partial_sort_at_most(v_at_most.begin(), last, 2);
+
+    auto it1 = v_at_most.begin();
+    auto it2 = v_std.begin();
+    while (!(last == it1)) {
+        EXPECT_EQ(*it1, *it2);
+        ++it1;
+        ++it2;
+    }
+}
+
+TEST(PartialSortAtMostTest, RangesConstexprStaticAssert) {
+    constexpr bool result = []() {
+        std::array<int, 5> a = {5, 4, 3, 2, 1};
+        ranges::partial_sort_at_most(a, 2);
+        return a[0] == 1 && a[1] == 2;
+    }();
+    static_assert(result);
+    EXPECT_TRUE(result);
+}
