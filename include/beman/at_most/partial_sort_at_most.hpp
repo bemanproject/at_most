@@ -29,7 +29,7 @@ constexpr void partial_sort_at_most(RandomAccessIterator first,
     auto dist = std::distance(first, last);
     auto k = std::min(n, dist);
     auto mid = std::next(first, k);
-    std::partial_sort(first, mid, last, comp);
+    std::ranges::partial_sort(std::ranges::subrange(first, last), mid, comp);
 }
 
 } // namespace beman::at_most
