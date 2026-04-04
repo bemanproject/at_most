@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <ranges>
 
 namespace beman::at_most {
 
@@ -29,7 +30,7 @@ constexpr void partial_sort_at_most(RandomAccessIterator                        
     auto dist = std::distance(first, last);
     auto k    = std::min(n, dist);
     auto mid  = std::next(first, k);
-    std::ranges::partial_sort(std::ranges::subrange(first, last), mid, comp);
+    std::ranges::partial_sort(first, mid, last, comp);
 }
 
 } // namespace beman::at_most
