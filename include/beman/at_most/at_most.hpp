@@ -4,7 +4,7 @@
 #define BEMAN_AT_MOST_AT_MOST_HPP
 
 #if __cplusplus < 202002L
-#error "beman.at_most requires at least C++20."
+    #error "beman.at_most requires at least C++20."
 #endif
 
 #include <beman/at_most/partial_sort_at_most.hpp>
