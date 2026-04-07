@@ -9,7 +9,7 @@ target_sources(
 )
 target_link_libraries(
     beman.at_most.tests
-    PRIVATE beman::at_most GTest::gtest GTest::gtest_main
+    PRIVATE beman::at_most GTest::gtest_main
 )
 
 include(GoogleTest)

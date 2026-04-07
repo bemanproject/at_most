@@ -8,6 +8,7 @@
 #endif
 
 #include <beman/at_most/partial_sort_at_most.hpp>
+#include <beman/at_most/nth_element_at_most.hpp>
 
 namespace beman::at_most {
 /**
