@@ -5,7 +5,10 @@ find_package(GTest REQUIRED)
 add_executable(beman.at_most.tests)
 target_sources(
     beman.at_most.tests
-    PRIVATE at_most.test.cpp partial_sort_at_most.test.cpp
+    PRIVATE
+        at_most.test.cpp
+        partial_sort_at_most.test.cpp
+        nth_element_at_most.test.cpp
 )
 target_link_libraries(
     beman.at_most.tests
