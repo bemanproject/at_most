@@ -11,7 +11,7 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 This can be used as a template for those intending to write Beman libraries.
 It may also find use as a minimal and modern  C++ project structure.
 
-**Implements**: `std::identity` proposed in [Standard Library Concepts (P3735R1)](https://wg21.link/P3735R1).
+**Implements**: `partial_sort_at_most` and `nth_element_at_most` proposed in [partial_sort_at_most, nth_element_at_most (P3735R1)](https://wg21.link/P3735R1).
 
 **Status**: [Under development and not yet ready for production use.](https://github.com/bemanproject/beman/blob/main/docs/beman_library_maturity_model.md#under-development-and-not-yet-ready-for-production-use)
 
@@ -21,65 +21,29 @@ It may also find use as a minimal and modern  C++ project structure.
 
 ## Usage
 
-`std::identity` is a function object type whose `operator()` returns its argument unchanged.
-`std::identity` serves as the default projection in constrained algorithms.
-Its direct usage is usually not needed.
+`partial_sort_at_most` and `nth_element_at_most` provide safer, count-based alternatives to `partial_sort` and `nth_element`.
 
-### Usage: default projection in constrained algorithms
+### Usage: partial_sort_at_most
 
-The following code snippet illustrates how we can achieve a default projection using `beman::at_most::identity`:
+The following code snippet illustrates how we can sort the "at most" 3 smallest elements of a vector:
 
 ```cpp
 #include <beman/at_most/at_most.hpp>
+#include <vector>
+#include <iostream>
 
-namespace exe = beman::at_most;
+int main() {
+    std::vector<int> v = {5, 4, 3, 2, 1};
 
-// Class with a pair of values.
-struct Pair
-{
-    int n;
-    std::string s;
+    // Sort at most 3 elements
+    beman::at_most::partial_sort_at_most(v.begin(), v.end(), 3);
 
-    // Output the pair in the form {n, s}.
-    // Used by the range-printer if no custom projection is provided (default: identity projection).
-    friend std::ostream &operator<<(std::ostream &os, const Pair &p)
-    {
-        return os << "Pair" << '{' << p.n << ", " << p.s << '}';
-    }
-};
-
-// A range-printer that can print projected (modified) elements of a range.
-// All the elements of the range are printed in the form {element1, element2, ...}.
-// e.g., pairs with identity: Pair{1, one}, Pair{2, two}, Pair{3, three}
-// e.g., pairs with custom projection: {1:one, 2:two, 3:three}
-template <std::ranges::input_range R,
-          typename Projection>
-void print(const std::string_view rem, R &&range, Projection projection = exe::identity>)
-{
-    std::cout << rem << '{';
-    std::ranges::for_each(
-        range,
-        [O = 0](const auto &o) mutable
-        { std::cout << (O++ ? ", " : "") << o; },
-        projection);
-    std::cout << "}\n";
-};
-
-int main()
-{
-    // A vector of pairs to print.
-    const std::vector<Pair> pairs = {
-        {1, "one"},
-        {2, "two"},
-        {3, "three"},
-    };
-
-    // Print the pairs using the default projection.
-    print("\tpairs with beman: ", pairs);
+    // Output: 1 2 3 5 4 (first 3 are sorted)
+    for (int x : v) std::cout << x << " ";
+    std::cout << "\n";
 
     return 0;
 }
-
 ```
 
 Full runnable examples can be found in [`examples/`](examples/).
