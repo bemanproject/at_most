@@ -23,15 +23,15 @@ $ cmake --workflow --preset gcc-release
 $ ./build/gcc-release/examples/latencies
 
 Target: 6
-  beman: 20 10 50 30 40 60 70 90 80 
-  std20: 20 10 50 30 40 60 70 90 80 
+  beman: 20 10 50 30 40 60 70 90 80
+  std20: 20 10 50 30 40 60 70 90 80
 
 [SLEEPING] Pausing 2 seconds before the underlying out-of-bounds error triggers...
 
 Target: 999999
-  beman: 90 20 70 30 10 80 40 60 50 
+  beman: 90 20 70 30 10 80 40 60 50
   std20:
-Error: attempt to advance a dereferenceable (start-of-sequence) iterator 
+Error: attempt to advance a dereferenceable (start-of-sequence) iterator
 999999 steps, which falls outside its valid range.
 
 
@@ -39,14 +39,14 @@ Error: attempt to advance a dereferenceable (start-of-sequence) iterator
 $ ./build/gcc-release/examples/top_scores
 
 Target: 6
-  beman: 9 8 7 6 5 4 1 2 3 
-  std20: 9 8 7 6 5 4 1 2 3 
+  beman: 9 8 7 6 5 4 1 2 3
+  std20: 9 8 7 6 5 4 1 2 3
 
 [SLEEPING] Pausing 2 seconds before the underlying out-of-bounds error triggers...
 
 Target: 999999
-  beman: 9 8 7 6 5 4 3 2 1 
+  beman: 9 8 7 6 5 4 3 2 1
   std20:
-Error: attempt to advance a dereferenceable (start-of-sequence) iterator 
+Error: attempt to advance a dereferenceable (start-of-sequence) iterator
 999999 steps, which falls outside its valid range.
 ```
