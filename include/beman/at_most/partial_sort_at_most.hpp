@@ -21,7 +21,7 @@ constexpr void partial_sort_at_most(RandomAccessIterator                        
                                     RandomAccessIterator                                                 last,
                                     typename std::iterator_traits<RandomAccessIterator>::difference_type n,
                                     Compare                                                              comp = {}) {
-    if (n < 0) {
+    if (n <= 0) {
         return;
     }
     auto dist = std::distance(first, last);
@@ -45,6 +45,9 @@ struct fn {
         requires std::sortable<I, Comp, Proj>
     constexpr I operator()(I first, S last, std::iter_difference_t<I> n, Comp comp = {}, Proj proj = {}) const {
         auto k   = std::max(std::iter_difference_t<I>(0), n);
+        if (k == 0) {
+            return std::ranges::next(first, last);
+        }
         auto mid = std::ranges::next(first, k, last);
         return std::ranges::partial_sort(first, mid, last, comp, proj);
     }
