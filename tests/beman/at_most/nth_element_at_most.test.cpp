@@ -89,6 +89,40 @@ TEST(NthElementAtMostTest, RangesBasic) {
     expect_ranges_equivalent_to_std(v, 2);
 }
 
+TEST(NthElementAtMostTest, RangesEdgeCases) {
+    std::vector<int> v = {1, 2, 3};
+    expect_ranges_equivalent_to_std(v, 0);
+    expect_ranges_equivalent_to_std(v, 2);
+    expect_ranges_equivalent_to_std(v, -1);
+    expect_ranges_equivalent_to_std(v, 3);
+    expect_ranges_equivalent_to_std(v, 100);
+}
+
+struct ValueSentinel {
+    int  value;
+    bool operator==(auto it) const { return *it == value; }
+};
+
+TEST(NthElementAtMostTest, RangesSentinel) {
+    std::vector<int> v         = {5, 4, 3, 2, 1, 99};
+    auto             v_std     = v;
+    auto             v_at_most = v;
+    auto             last      = ValueSentinel{99};
+
+    auto nth_std = std::ranges::next(v_std.begin(), 2, last);
+    std::ranges::nth_element(v_std.begin(), nth_std, last);
+
+    ranges::nth_element_at_most(v_at_most.begin(), last, 2);
+
+    auto it1 = v_at_most.begin();
+    auto it2 = v_std.begin();
+    while (!(last == it1)) {
+        EXPECT_EQ(*it1, *it2);
+        ++it1;
+        ++it2;
+    }
+}
+
 TEST(NthElementAtMostTest, RangesProjection) {
     std::vector<Holder> v = {{1, 10}, {2, 5}, {3, 8}};
     expect_ranges_equivalent_to_std(v, 1, std::ranges::less{}, &Holder::val);
