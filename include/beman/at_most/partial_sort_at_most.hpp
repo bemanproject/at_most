@@ -44,7 +44,7 @@ struct fn {
               typename Proj = std::identity>
         requires std::sortable<I, Comp, Proj>
     constexpr I operator()(I first, S last, std::iter_difference_t<I> n, Comp comp = {}, Proj proj = {}) const {
-        auto k   = std::max(std::iter_difference_t<I>(0), n);
+        auto k = std::max(std::iter_difference_t<I>(0), n);
         if (k == 0) {
             return std::ranges::next(first, last);
         }
