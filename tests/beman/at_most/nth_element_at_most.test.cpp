@@ -131,15 +131,12 @@ TEST(NthElementAtMostTest, RangesEdgeCases) {
 }
 
 TEST(NthElementAtMostTest, RangesSentinelEdgeCases) {
-    std::vector<int> v         = {5, 4, 3, 2, 1, 99};
-    auto             last      = ValueSentinel{99};
-    
-    auto v1 = v;
+    std::vector<int> v    = {5, 4, 3, 2, 1, 99};
+    auto             last = ValueSentinel{99};
+    auto             v1   = v;
     ranges::nth_element_at_most(v1.begin(), last, -1);
-    
     auto v2 = v;
     ranges::nth_element_at_most(v2.begin(), last, 100);
-    
     auto v3 = v;
     ranges::nth_element_at_most(v3.begin(), last, 5); // n == size
 }
