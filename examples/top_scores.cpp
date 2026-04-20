@@ -5,8 +5,10 @@
 #include <beman/at_most/at_most.hpp>
 
 #include <algorithm>
+#include <chrono>
 #include <iostream>
 #include <iterator>
+#include <thread>
 #include <vector>
 
 namespace std20 {
@@ -48,25 +50,27 @@ std::vector<int> api(std::vector<int> scores, int n) {
 
 } // namespace beman_at_most
 
+void run(const std::vector<int>& scores, int target) {
+    std::cout << "\nTarget: " << target << "\n";
+    std::cout << "  beman: ";
+    std::vector<int> new_results = beman_at_most::api(scores, target);
+    for (int s : new_results) std::cout << s << ' ';
+    std::cout << "\n";
+    
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+    std::cout << "  std20: ";
+    std::vector<int> old_results = std20::api(scores, target);
+    for (int s : old_results) std::cout << s << ' ';
+    std::cout << "\n";
+}
+
 int example() {
     std::vector<int> scores = {9, 2, 7, 3, 1, 8, 4, 6, 5};
 
-    auto run = [&](int target) {
-        std::cout << "\nTarget: " << target << "\n";
-        
-        std::cout << "  beman: ";
-        std::vector<int> new_results = beman_at_most::api(scores, target);
-        for (int s : new_results) std::cout << s << ' ';
-        std::cout << "\n";
-
-        std::cout << "  std20: ";
-        std::vector<int> old_results = std20::api(scores, target);
-        for (int s : old_results) std::cout << s << ' ';
-        std::cout << "\n";
-    };
-
-    run(6);
-    run(999999);
+    run(scores, 6);
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    run(scores, 999999);
 
     return 0;
 }
