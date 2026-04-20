@@ -3,11 +3,14 @@
 #ifndef BEMAN_AT_MOST_NTH_ELEMENT_AT_MOST_HPP
 #define BEMAN_AT_MOST_NTH_ELEMENT_AT_MOST_HPP
 
+// clang-format off
 #if (defined(_MSVC_LANG) ? _MSVC_LANG : __cplusplus) < 202002L
     #error "beman.at_most requires at least C++20."
 #endif
+// clang-format on
 
 #include <algorithm>
+#include <functional>
 #include <iterator>
 #include <ranges>
 
@@ -26,7 +29,7 @@ constexpr void nth_element_at_most(RandomAccessIterator                         
         return;
     }
     auto nth = std::next(first, n);
-    std::ranges::nth_element(first, nth, last, comp);
+    std::nth_element(first, nth, last, comp);
 }
 
 namespace ranges {

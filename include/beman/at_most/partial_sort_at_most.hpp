@@ -3,11 +3,14 @@
 #ifndef BEMAN_AT_MOST_PARTIAL_SORT_AT_MOST_HPP
 #define BEMAN_AT_MOST_PARTIAL_SORT_AT_MOST_HPP
 
+// clang-format off
 #if (defined(_MSVC_LANG) ? _MSVC_LANG : __cplusplus) < 202002L
     #error "beman.at_most requires at least C++20."
 #endif
+// clang-format on
 
 #include <algorithm>
+#include <functional>
 #include <iterator>
 #include <ranges>
 
@@ -18,13 +21,16 @@ constexpr void partial_sort_at_most(RandomAccessIterator                        
                                     RandomAccessIterator                                                 last,
                                     typename std::iterator_traits<RandomAccessIterator>::difference_type n,
                                     Compare                                                              comp = {}) {
-    if (n <= 0) {
+    if (n < 0) {
         return;
     }
     auto dist = std::distance(first, last);
-    auto k    = std::min(n, dist);
-    auto mid  = std::next(first, k);
-    std::ranges::partial_sort(first, mid, last, comp);
+    if (n >= dist) {
+        std::sort(first, last, comp);
+        return;
+    }
+    auto mid = std::next(first, n);
+    std::partial_sort(first, mid, last, comp);
 }
 
 namespace ranges {
