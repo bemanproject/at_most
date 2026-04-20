@@ -17,7 +17,6 @@ namespace std20 {
 
 void sort_top_n(std::vector<int>& v, int n) {
     // needs extra bounds checking
-    
     // if (n < 0) {
     //     return;
     // }
@@ -39,9 +38,7 @@ namespace beman_at_most {
 
 // partial_sort_at_most includes bounds checking.
 
-void sort_top_n(std::vector<int>& v, int n) {
-    beman::at_most::ranges::partial_sort_at_most(v, n, std::greater<>{});
-}
+void sort_top_n(std::vector<int>& v, int n) { beman::at_most::ranges::partial_sort_at_most(v, n, std::greater<>{}); }
 
 std::vector<int> api(std::vector<int> scores, int n) {
     sort_top_n(scores, n);
@@ -54,14 +51,15 @@ void run(const std::vector<int>& scores, int target) {
     std::cout << "\nTarget: " << target << "\n";
     std::cout << "  beman: ";
     std::vector<int> new_results = beman_at_most::api(scores, target);
-    for (int s : new_results) std::cout << s << ' ';
+    for (int s : new_results)
+        std::cout << s << ' ';
     std::cout << "\n";
-    
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     std::cout << "  std20: ";
     std::vector<int> old_results = std20::api(scores, target);
-    for (int s : old_results) std::cout << s << ' ';
+    for (int s : old_results)
+        std::cout << s << ' ';
     std::cout << "\n";
 }
 

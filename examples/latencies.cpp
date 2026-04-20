@@ -35,9 +35,7 @@ namespace beman_at_most {
 // After P3735R1, the code would look like this.
 // Using nth_element_at_most to handle bounds checking automatically.
 
-void isolate_nth(std::vector<int>& v, int n) {
-    beman::at_most::ranges::nth_element_at_most(v, n);
-}
+void isolate_nth(std::vector<int>& v, int n) { beman::at_most::ranges::nth_element_at_most(v, n); }
 
 std::vector<int> api(std::vector<int> latencies, int n) {
     isolate_nth(latencies, n);
@@ -47,17 +45,19 @@ std::vector<int> api(std::vector<int> latencies, int n) {
 } // namespace beman_at_most
 
 void run(const std::vector<int>& latencies, int target) {
-    std::cout << "\nTarget: " << target << "\n"; 
+    std::cout << "\nTarget: " << target << "\n";
     std::cout << "  beman: ";
     std::vector<int> new_results = beman_at_most::api(latencies, target);
-    for (int l : new_results) std::cout << l << ' ';
+    for (int l : new_results)
+        std::cout << l << ' ';
     std::cout << "\n";
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     std::cout << "  std20: ";
     std::vector<int> old_results = std20::api(latencies, target);
-    for (int l : old_results) std::cout << l << ' ';
+    for (int l : old_results)
+        std::cout << l << ' ';
     std::cout << "\n";
 }
 

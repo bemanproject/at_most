@@ -3,10 +3,7 @@
 include(GNUInstallDirs)
 
 # List of all buildable examples.
-set(EXAMPLES
-    latencies
-    top_scores
-)
+set(EXAMPLES latencies top_scores)
 
 foreach(example ${EXAMPLES})
     # Add example executable.
@@ -18,7 +15,7 @@ foreach(example ${EXAMPLES})
     # Link example with the library.
     target_link_libraries(${example} PRIVATE beman::at_most)
 
-    # Install . 
+    # Install .
     install(
         TARGETS ${example}
         COMPONENT beman.at_most_examples
