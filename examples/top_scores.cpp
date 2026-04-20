@@ -1,24 +1,33 @@
 // examples/top_scores.cpp                                            -*-C++-*-
+#define _GLIBCXX_DEBUG
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 #include <beman/at_most/at_most.hpp>
 
 #include <algorithm>
+#include <iostream>
 #include <iterator>
 #include <vector>
 
 namespace std20 {
 
-// Prior to P3735R1, the code would look like this.
-// Sorting at most N elements requires manual bounds checking to avoid undefined behavior.
+// Sorting at most N elements requires manual bounds checking (to avoid UB).
 
-void sort_top_n(std::vector<int>& v, std::ptrdiff_t n) {
-    auto n_clamped = std::min<std::ptrdiff_t>(n, std::distance(v.begin(), v.end()));
-    std::partial_sort(v.begin(), v.begin() + n_clamped, v.end(), std::greater<>{});
+void sort_top_n(std::vector<int>& v, int n) {
+    // needs extra bounds checking
+    
+    // if (n < 0) {
+    //     return;
+    // }
+    // if (n >= std::distance(v.begin(), v.end())) {
+    //     n = std::distance(v.begin(), v.end());
+    // }
+    // std::partial_sort(v.begin(), v.begin() + n, v.end(), std::greater<>{});
+    std::partial_sort(v.begin(), v.begin() + n, v.end(), std::greater<>{});
 }
 
-std::vector<int> api(std::vector<int> scores) {
-    sort_top_n(scores, 3);
+std::vector<int> api(std::vector<int> scores, int n) {
+    sort_top_n(scores, n);
     return scores;
 }
 
@@ -26,26 +35,38 @@ std::vector<int> api(std::vector<int> scores) {
 
 namespace beman_at_most {
 
-// After P3735R1, the code would look like this.
-// Using partial_sort_at_most to handle bounds checking automatically.
+// partial_sort_at_most includes bounds checking.
 
-void sort_top_n(std::vector<int>& v, std::ptrdiff_t n) {
+void sort_top_n(std::vector<int>& v, int n) {
     beman::at_most::ranges::partial_sort_at_most(v, n, std::greater<>{});
 }
 
-std::vector<int> api(std::vector<int> scores) {
-    sort_top_n(scores, 3);
+std::vector<int> api(std::vector<int> scores, int n) {
+    sort_top_n(scores, n);
     return scores;
 }
 
 } // namespace beman_at_most
 
 int example() {
-    // Example from P3735R1: partial_sort_at_most.
     std::vector<int> scores = {9, 2, 7, 3, 1, 8, 4, 6, 5};
 
-    [[maybe_unused]] std::vector<int> old_scores = std20::api(scores);
-    [[maybe_unused]] std::vector<int> new_scores = beman_at_most::api(scores);
+    auto run = [&](int target) {
+        std::cout << "\nTarget: " << target << "\n";
+        
+        std::cout << "  beman: ";
+        std::vector<int> new_results = beman_at_most::api(scores, target);
+        for (int s : new_results) std::cout << s << ' ';
+        std::cout << "\n";
+
+        std::cout << "  std20: ";
+        std::vector<int> old_results = std20::api(scores, target);
+        for (int s : old_results) std::cout << s << ' ';
+        std::cout << "\n";
+    };
+
+    run(6);
+    run(999999);
 
     return 0;
 }
