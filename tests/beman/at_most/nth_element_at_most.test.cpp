@@ -144,6 +144,19 @@ TEST(NthElementAtMostTest, RangesSentinelEdgeCases) {
 TEST(NthElementAtMostTest, RangesProjection) {
     std::vector<Holder> v = {{1, 10}, {2, 5}, {3, 8}};
     expect_ranges_equivalent_to_std(v, 1, std::ranges::less{}, &Holder::val);
+    expect_ranges_equivalent_to_std(v, -1, std::ranges::less{}, &Holder::val);
+    expect_ranges_equivalent_to_std(v, 100, std::ranges::less{}, &Holder::val);
+}
+
+TEST(NthElementAtMostTest, RangesRValue) {
+    auto res = ranges::nth_element_at_most(std::vector<int>{3, 2, 1}, 100);
+    static_assert(std::same_as<decltype(res), std::ranges::dangling>);
+}
+
+TEST(NthElementAtMostTest, RangesRawArray) {
+    int arr[] = {1, 2, 3};
+    ranges::nth_element_at_most(arr, arr + 3, -1);
+    ranges::nth_element_at_most(arr, arr + 3, 100);
 }
 
 TEST(NthElementAtMostTest, RangesConstexprStaticAssert) {
