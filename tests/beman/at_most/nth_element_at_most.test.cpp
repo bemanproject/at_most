@@ -89,9 +89,74 @@ TEST(NthElementAtMostTest, RangesBasic) {
     expect_ranges_equivalent_to_std(v, 2);
 }
 
+struct ValueSentinel {
+    int  value;
+    bool operator==(auto it) const { return *it == value; }
+};
+
+TEST(NthElementAtMostTest, RangesSentinel) {
+    std::vector<int> v         = {5, 4, 3, 2, 1, 99};
+    auto             v_std     = v;
+    auto             v_at_most = v;
+    auto             last      = ValueSentinel{99};
+
+    auto nth_std = std::ranges::next(v_std.begin(), 2, last);
+    std::ranges::nth_element(v_std.begin(), nth_std, last);
+
+    ranges::nth_element_at_most(v_at_most.begin(), last, 2);
+
+    auto it1 = v_at_most.begin();
+    auto it2 = v_std.begin();
+    while (!(last == it1)) {
+        EXPECT_EQ(*it1, *it2);
+        ++it1;
+        ++it2;
+    }
+}
+
+TEST(NthElementAtMostTest, RangesEmpty) {
+    std::vector<int> v = {};
+    expect_ranges_equivalent_to_std(v, 0);
+    expect_ranges_equivalent_to_std(v, 1);
+    expect_ranges_equivalent_to_std(v, -1);
+}
+
+TEST(NthElementAtMostTest, RangesEdgeCases) {
+    std::vector<int> v = {1, 2, 3};
+    expect_ranges_equivalent_to_std(v, 0);
+    expect_ranges_equivalent_to_std(v, 2);
+    expect_ranges_equivalent_to_std(v, -1);
+    expect_ranges_equivalent_to_std(v, 3);
+    expect_ranges_equivalent_to_std(v, 100);
+}
+
+TEST(NthElementAtMostTest, RangesSentinelEdgeCases) {
+    std::vector<int> v    = {5, 4, 3, 2, 1, 99};
+    auto             last = ValueSentinel{99};
+    auto             v1   = v;
+    ranges::nth_element_at_most(v1.begin(), last, -1);
+    auto v2 = v;
+    ranges::nth_element_at_most(v2.begin(), last, 100);
+    auto v3 = v;
+    ranges::nth_element_at_most(v3.begin(), last, 5); // n == size
+}
+
 TEST(NthElementAtMostTest, RangesProjection) {
     std::vector<Holder> v = {{1, 10}, {2, 5}, {3, 8}};
     expect_ranges_equivalent_to_std(v, 1, std::ranges::less{}, &Holder::val);
+    expect_ranges_equivalent_to_std(v, -1, std::ranges::less{}, &Holder::val);
+    expect_ranges_equivalent_to_std(v, 100, std::ranges::less{}, &Holder::val);
+}
+
+TEST(NthElementAtMostTest, RangesRValue) {
+    auto res = ranges::nth_element_at_most(std::vector<int>{3, 2, 1}, 100);
+    static_assert(std::same_as<decltype(res), std::ranges::dangling>);
+}
+
+TEST(NthElementAtMostTest, RangesRawArray) {
+    int arr[] = {1, 2, 3};
+    ranges::nth_element_at_most(arr, arr + 3, -1);
+    ranges::nth_element_at_most(arr, arr + 3, 100);
 }
 
 TEST(NthElementAtMostTest, RangesConstexprStaticAssert) {

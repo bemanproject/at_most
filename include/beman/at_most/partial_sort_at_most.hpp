@@ -3,11 +3,16 @@
 #ifndef BEMAN_AT_MOST_PARTIAL_SORT_AT_MOST_HPP
 #define BEMAN_AT_MOST_PARTIAL_SORT_AT_MOST_HPP
 
-#if (defined(_MSVC_LANG) ? _MSVC_LANG : __cplusplus) < 202002L
+// clang-format off
+#if defined(_MSVC_LANG) && _MSVC_LANG < 202002L
+    #error "beman.at_most requires at least C++20."
+#elif !defined(_MSVC_LANG) && __cplusplus < 202002L
     #error "beman.at_most requires at least C++20."
 #endif
+// clang-format on
 
 #include <algorithm>
+#include <functional>
 #include <iterator>
 #include <ranges>
 
@@ -22,9 +27,12 @@ constexpr void partial_sort_at_most(RandomAccessIterator                        
         return;
     }
     auto dist = std::distance(first, last);
-    auto k    = std::min(n, dist);
-    auto mid  = std::next(first, k);
-    std::ranges::partial_sort(first, mid, last, comp);
+    if (n >= dist) {
+        std::sort(first, last, comp);
+        return;
+    }
+    auto mid = std::next(first, n);
+    std::partial_sort(first, mid, last, comp);
 }
 
 namespace ranges {
@@ -38,7 +46,10 @@ struct fn {
               typename Proj = std::identity>
         requires std::sortable<I, Comp, Proj>
     constexpr I operator()(I first, S last, std::iter_difference_t<I> n, Comp comp = {}, Proj proj = {}) const {
-        auto k   = std::max(std::iter_difference_t<I>(0), n);
+        auto k = std::max(std::iter_difference_t<I>(0), n);
+        if (k == 0) {
+            return std::ranges::next(first, last);
+        }
         auto mid = std::ranges::next(first, k, last);
         return std::ranges::partial_sort(first, mid, last, comp, proj);
     }
