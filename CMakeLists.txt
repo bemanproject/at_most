@@ -24,8 +24,9 @@ option(
     ${PROJECT_IS_TOP_LEVEL}
 )
 
-# for find of beman-install-library
+# for find of beman_install_library and configure_build_telemetry
 include(infra/cmake/beman-install-library.cmake)
+include(infra/cmake/BuildTelemetryConfig.cmake)
 
 add_library(beman.at_most INTERFACE)
 add_library(beman::at_most ALIAS beman.at_most)
@@ -43,6 +44,7 @@ set_target_properties(
 add_subdirectory(include/beman/at_most)
 
 beman_install_library(beman.at_most TARGETS beman.at_most)
+configure_build_telemetry()
 
 if(BEMAN_AT_MOST_BUILD_TESTS)
     enable_testing()
