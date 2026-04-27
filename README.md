@@ -7,9 +7,7 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 <!-- markdownlint-disable-next-line line-length -->
 ![Library Status](https://raw.githubusercontent.com/bemanproject/beman/refs/heads/main/images/badges/beman_badge-beman_library_under_development.svg) ![Continuous Integration Tests](https://github.com/bemanproject/at_most/actions/workflows/ci_tests.yml/badge.svg) ![Lint Check (pre-commit)](https://github.com/bemanproject/at_most/actions/workflows/pre-commit-check.yml/badge.svg) [![Coverage](https://coveralls.io/repos/github/bemanproject/at_most/badge.svg?branch=main)](https://coveralls.io/github/bemanproject/at_most?branch=main) ![Standard Target](https://github.com/bemanproject/beman/blob/main/images/badges/cpp29.svg) [![Compiler Explorer Example](https://img.shields.io/badge/Try%20it%20on%20Compiler%20Explorer-grey?logo=compilerexplorer&logoColor=67c52a)](https://wg21.link/P3735R1)
 
-`beman.at_most` is a minimal C++ library conforming to [The Beman Standard](https://github.com/bemanproject/beman/blob/main/docs/beman_standard.md).
-This can be used as a template for those intending to write Beman libraries.
-It may also find use as a minimal and modern  C++ project structure.
+`beman.at_most` is (... TODO: description).
 
 **Implements**: `partial_sort_at_most` and `nth_element_at_most` proposed in [partial_sort_at_most, nth_element_at_most (P3735R1)](https://wg21.link/P3735R1).
 
@@ -69,8 +67,10 @@ You can disable building tests by setting CMake option `BEMAN_AT_MOST_BUILD_TEST
 | GCC        | 15-13   | C++26-C++20   | libstdc++         |
 | GCC        | 12-11   | C++23, C++20  | libstdc++         |
 | Clang      | 22-19   | C++26-C++20   | libstdc++, libc++ |
-| Clang      | 18-17   | C++26-C++20   | libc++            |
-| Clang      | 18-17   | C++20         | libstdc++         |
+| Clang      | 18      | C++26-C++20   | libc++            |
+| Clang      | 18      | C++23, C++20  | libstdc++         |
+| Clang      | 17      | C++26-C++20   | libc++            |
+| Clang      | 17      | C++20         | libstdc++         |
 | AppleClang | latest  | C++26-C++20   | libc++            |
 | MSVC       | latest  | C++23         | MSVC STL          |
 
