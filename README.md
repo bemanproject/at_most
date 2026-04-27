@@ -39,7 +39,8 @@ int main() {
     beman::at_most::partial_sort_at_most(v.begin(), v.end(), 3);
 
     // Output: 1 2 3 5 4 (first 3 are sorted)
-    for (int x : v) std::cout << x << " ";
+    for (int x : v)
+        std::cout << x << " ";
     std::cout << "\n";
 
     return 0;
