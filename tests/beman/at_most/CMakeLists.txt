@@ -16,4 +16,4 @@ target_link_libraries(
 )
 
 include(GoogleTest)
-gtest_discover_tests(beman.at_most.tests)
+gtest_discover_tests(beman.at_most.tests DISCOVERY_TIMEOUT 60)

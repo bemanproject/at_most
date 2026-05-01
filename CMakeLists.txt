@@ -3,8 +3,7 @@
 cmake_minimum_required(VERSION 3.30...4.3)
 
 project(
-    beman.at_most # CMake Project Name, which is also the name of the top-level
-    # targets (e.g., library, executable, etc.).
+    beman.at_most
     DESCRIPTION "Safe versions of partial_sort and get_nth_element (P3735)"
     LANGUAGES CXX
     VERSION 0.1.0
