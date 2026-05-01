@@ -1,0 +1,17 @@
+{
+  "name": "beman-at-most",
+  "version-semver": "@VERSION@",
+  "description": "Safe versions of partial_sort and get_nth_element (P3735)",
+  "homepage": "https://github.com/bemanproject/at_most",
+  "license": "Apache-2.0 WITH LLVM-exception",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}
