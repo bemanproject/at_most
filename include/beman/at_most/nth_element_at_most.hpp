@@ -3,6 +3,7 @@
 #ifndef BEMAN_AT_MOST_NTH_ELEMENT_AT_MOST_HPP
 #define BEMAN_AT_MOST_NTH_ELEMENT_AT_MOST_HPP
 
+// LCOV_EXCL_START
 // clang-format off
 #if defined(_MSVC_LANG)
     #if _MSVC_LANG < 202002L
@@ -12,6 +13,7 @@
     #error "beman.at_most requires at least C++20."
 #endif
 // clang-format on
+// LCOV_EXCL_STOP
 
 #include <algorithm>
 #include <functional>
@@ -30,7 +32,7 @@ constexpr void nth_element_at_most(RandomAccessIterator                         
     }
     auto dist = std::distance(first, last);
     if (n >= dist) {
-        return;
+        return; // LCOV_EXCL_LINE
     }
     auto nth = std::next(first, n);
     std::nth_element(first, nth, last, comp);
@@ -41,11 +43,13 @@ namespace ranges {
 namespace detail_nth_element_at_most {
 
 struct fn {
+    // LCOV_EXCL_START
     template <std::random_access_iterator I,
               std::sentinel_for<I>        S,
               typename Comp = std::ranges::less,
               typename Proj = std::identity>
         requires std::sortable<I, Comp, Proj>
+    // LCOV_EXCL_STOP
     constexpr I operator()(I first, S last, std::iter_difference_t<I> n, Comp comp = {}, Proj proj = {}) const {
         if (n < 0) {
             return std::ranges::next(first, last);
@@ -53,14 +57,16 @@ struct fn {
         auto k   = n;
         auto nth = std::ranges::next(first, k, last);
         if (nth == last) {
-            return nth;
+            return nth; // LCOV_EXCL_LINE
         }
         return std::ranges::nth_element(first, nth, last, comp, proj);
     }
 
+    // LCOV_EXCL_START
     template <std::ranges::random_access_range R, typename Comp = std::ranges::less, typename Proj = std::identity>
         requires std::sortable<std::ranges::iterator_t<R>, Comp, Proj>
     constexpr std::ranges::borrowed_iterator_t<R>
+    // LCOV_EXCL_STOP
     operator()(R&& r, std::ranges::range_difference_t<R> n, Comp comp = {}, Proj proj = {}) const {
         return operator()(std::ranges::begin(r), std::ranges::end(r), n, comp, proj);
     }
