@@ -134,11 +134,14 @@ TEST(NthElementAtMostTest, RangesSentinelEdgeCases) {
     std::vector<int> v    = {5, 4, 3, 2, 1, 99};
     auto             last = ValueSentinel{99};
     auto             v1   = v;
-    ranges::nth_element_at_most(v1.begin(), last, -1);
-    auto v2 = v;
-    ranges::nth_element_at_most(v2.begin(), last, 100);
-    auto v3 = v;
-    ranges::nth_element_at_most(v3.begin(), last, 5); // n == size
+    auto             res1 = ranges::nth_element_at_most(v1.begin(), last, -1);
+    EXPECT_TRUE(res1 == v1.end() - 1);
+    auto v2   = v;
+    auto res2 = ranges::nth_element_at_most(v2.begin(), last, 100);
+    EXPECT_TRUE(res2 == v2.end() - 1);
+    auto v3   = v;
+    auto res3 = ranges::nth_element_at_most(v3.begin(), last, 5); // n == size
+    EXPECT_TRUE(res3 == v3.end() - 1);
 }
 
 TEST(NthElementAtMostTest, RangesProjection) {
@@ -157,6 +160,7 @@ TEST(NthElementAtMostTest, RangesRawArray) {
     int arr[] = {1, 2, 3};
     ranges::nth_element_at_most(arr, arr + 3, -1);
     ranges::nth_element_at_most(arr, arr + 3, 100);
+    ranges::nth_element_at_most(arr, arr + 3, 1);
 }
 
 TEST(NthElementAtMostTest, RangesConstexprStaticAssert) {
