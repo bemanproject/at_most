@@ -78,8 +78,8 @@ TEST(PartialSortAtMostTest, CustomGreater) {
 }
 
 TEST(PartialSortAtMostTest, CustomLambda) {
-    std::vector<int> v = {10, 5, 8, 1, 4};
-    auto comp = [](int a, int b) { return a < b; };
+    std::vector<int> v    = {10, 5, 8, 1, 4};
+    auto             comp = [](int a, int b) { return a < b; };
     expect_equivalent_to_std(v, 2, comp);
     expect_equivalent_to_std(v, 0, comp);
     expect_equivalent_to_std(v, -1, comp);

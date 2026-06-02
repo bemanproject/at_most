@@ -28,7 +28,7 @@ constexpr void partial_sort_at_most(RandomAccessIterator                        
                                     RandomAccessIterator                                                 last,
                                     typename std::iterator_traits<RandomAccessIterator>::difference_type n,
                                     Compare                                                              comp = {}) {
-// LCOV_EXCL_STOP
+    // LCOV_EXCL_STOP
     if (n <= 0) {
         return;
     } // LCOV_EXCL_LINE
