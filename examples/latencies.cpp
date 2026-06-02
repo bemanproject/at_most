@@ -5,77 +5,56 @@
 #include <beman/at_most/at_most.hpp>
 
 #include <algorithm>
-#include <chrono>
 #include <iostream>
 #include <iterator>
-#include <thread>
 #include <vector>
-
-namespace std20 {
 
 // Prior to P3735R1, the code would look like this.
 // Finding the Nth element requires manual bounds checking to avoid undefined behavior.
+void run_standard(std::vector<int> latencies, int n) {
+    std::cout << "  std:   ";
+    // Manual bounds checking would be required here to avoid UB:
+    // if (n < 0 || n >= std::distance(latencies.begin(), latencies.end())) return;
 
-void isolate_nth(std::vector<int>& v, int n) {
-    // if (n < 0 || n >= std::distance(v.begin(), v.end())) {
-    //     return;
-    // }
-    std::nth_element(v.begin(), v.begin() + n, v.end());
+    std::nth_element(latencies.begin(), latencies.begin() + n, latencies.end());
+
+    for (int l : latencies)
+        std::cout << l << ' ';
+    std::cout << "\n";
 }
-
-std::vector<int> api(std::vector<int> latencies, int n) {
-    isolate_nth(latencies, n);
-    return latencies;
-}
-
-} // namespace std20
-
-namespace beman_at_most {
 
 // After P3735R1, the code would look like this.
 // Using nth_element_at_most to handle bounds checking automatically.
-
-void isolate_nth(std::vector<int>& v, int n) { beman::at_most::ranges::nth_element_at_most(v, n); }
-
-std::vector<int> api(std::vector<int> latencies, int n) {
-    isolate_nth(latencies, n);
-    return latencies;
-}
-
-} // namespace beman_at_most
-
-void run(const std::vector<int>& latencies, int target) {
-    std::cout << "\nTarget: " << target << "\n";
+void run_beman(std::vector<int> latencies, int n) {
     std::cout << "  beman: ";
-    std::vector<int> new_results = beman_at_most::api(latencies, target);
-    for (int l : new_results)
-        std::cout << l << ' ';
-    std::cout << "\n";
+    beman::at_most::ranges::nth_element_at_most(latencies, n);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
-    std::cout << "  std20: ";
-    std::vector<int> old_results = std20::api(latencies, target);
-    for (int l : old_results)
+    for (int l : latencies)
         std::cout << l << ' ';
     std::cout << "\n";
 }
 
-int example() {
+int main() {
     // Example from P3735R1: nth_element_at_most.
     std::vector<int> latencies = {90, 20, 70, 30, 10, 80, 40, 60, 50};
 
-    run(latencies, 6);
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    run(latencies, 999999);
+    std::cout << "\nTarget index: 6\n";
+    run_beman(latencies, 6);
+    run_standard(latencies, 6);
+
+    std::cout << "\nTarget index: 0\n";
+    run_beman(latencies, 0);
+
+    std::cout << "\nTarget index: 999999 (Out of bounds)\n";
+    run_beman(latencies, 999999);
+
+    // run_standard(latencies, 999999); // Uncomment to see undefined behavior crash
 
     return 0;
 }
-
-int main() { example(); }
 
 // # build example:
 // $ cmake --workflow --preset gcc-release
 //
 // # run example:
-// $ ./build/gcc-release/examples/latencies
+// $ ./build/gcc-release/examples/beman.at_most.examples.latencies
