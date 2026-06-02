@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-set(ALL_EXAMPLES latencies top_scores)
+set(ALL_EXAMPLES latencies top_scores partial_sort_at_most)
 
 message("Examples to be built: ${ALL_EXAMPLES}")
 
