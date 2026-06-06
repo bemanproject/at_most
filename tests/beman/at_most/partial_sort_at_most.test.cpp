@@ -71,11 +71,20 @@ TEST(PartialSortAtMostTest, DequeVariety) {
 TEST(PartialSortAtMostTest, CustomGreater) {
     std::vector<int> v = {1, 2, 3, 4, 5};
     expect_equivalent_to_std(v, 3, std::greater<int>());
+    expect_equivalent_to_std(v, 0, std::greater<int>());
+    expect_equivalent_to_std(v, -5, std::greater<int>());
+    expect_equivalent_to_std(v, 5, std::greater<int>());
+    expect_equivalent_to_std(v, 100, std::greater<int>());
 }
 
 TEST(PartialSortAtMostTest, CustomLambda) {
-    std::vector<int> v = {10, 5, 8, 1, 4};
-    expect_equivalent_to_std(v, 2, [](int a, int b) { return a < b; });
+    std::vector<int> v    = {10, 5, 8, 1, 4};
+    auto             comp = [](int a, int b) { return a < b; };
+    expect_equivalent_to_std(v, 2, comp);
+    expect_equivalent_to_std(v, 0, comp);
+    expect_equivalent_to_std(v, -1, comp);
+    expect_equivalent_to_std(v, 5, comp);
+    expect_equivalent_to_std(v, 10, comp);
 }
 
 struct CustomLess {
@@ -85,6 +94,10 @@ struct CustomLess {
 TEST(PartialSortAtMostTest, CustomStruct) {
     std::vector<int> v = {10, 5, 8, 1, 4};
     expect_equivalent_to_std(v, 2, CustomLess{});
+    expect_equivalent_to_std(v, 0, CustomLess{});
+    expect_equivalent_to_std(v, -1, CustomLess{});
+    expect_equivalent_to_std(v, 5, CustomLess{});
+    expect_equivalent_to_std(v, 100, CustomLess{});
 }
 
 // Compile-Time tests
@@ -125,6 +138,12 @@ void expect_ranges_equivalent_to_std(Container v, int n, Compare comp = {}, Proj
 TEST(PartialSortAtMostTest, RangesBasic) {
     std::vector<int> v = {5, 4, 3, 2, 1};
     expect_ranges_equivalent_to_std(v, 3);
+    expect_ranges_equivalent_to_std(v, 0);
+    expect_ranges_equivalent_to_std(v, -1);
+    expect_ranges_equivalent_to_std(v, 3, std::greater<>{});
+    expect_ranges_equivalent_to_std(v, 0, std::greater<>{});
+    expect_ranges_equivalent_to_std(v, -1, std::greater<>{});
+    expect_ranges_equivalent_to_std(v, 100, std::greater<>{});
 }
 
 TEST(PartialSortAtMostTest, RangesProjection) {

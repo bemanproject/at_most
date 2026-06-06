@@ -3,4 +3,7 @@
 #include <beman/at_most/at_most.hpp>
 #include <gtest/gtest.h>
 
-TEST(AtMostTest, VersionTest) { EXPECT_EQ(beman::at_most::version(), 1); }
+TEST(AtMostTest, VersionTest) {
+    volatile int v = beman::at_most::version();
+    EXPECT_EQ(v, 1);
+}
