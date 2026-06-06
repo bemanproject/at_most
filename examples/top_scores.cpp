@@ -10,10 +10,9 @@
 #include <vector>
 
 // Prior to P3735R1, the code would look like this.
-// Sorting at most N elements requires manual bounds checking to avoid undefined behavior.
+// Sorting at most N elements requires manual bounds checking (which is commented here) to avoid undefined behavior.
 void run_standard(std::vector<int> scores, int n) {
     std::cout << "  std:   ";
-    // Manual bounds checking would be required here to avoid UB:
     // if (n < 0) return;
     // if (n >= std::distance(scores.begin(), scores.end())) n = std::distance(scores.begin(), scores.end());
 

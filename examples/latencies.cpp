@@ -10,10 +10,9 @@
 #include <vector>
 
 // Prior to P3735R1, the code would look like this.
-// Finding the Nth element requires manual bounds checking to avoid undefined behavior.
+// Finding the Nth element requires manual bounds checking (which is commented here) to avoid undefined behavior.
 void run_standard(std::vector<int> latencies, int n) {
     std::cout << "  std:   ";
-    // Manual bounds checking would be required here to avoid UB:
     // if (n < 0 || n >= std::distance(latencies.begin(), latencies.end())) return;
 
     std::nth_element(latencies.begin(), latencies.begin() + n, latencies.end());
